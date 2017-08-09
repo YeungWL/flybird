@@ -10,6 +10,7 @@
 <body>
 <canvas id="c" width="800" height="600"></canvas>
 <script  src="./js/bird.js"></script>
+<script  src="./js/sky.js"></script>
 
 <script>
     // 利用for循环的特点 -- 可以同时加载多个照片
@@ -72,7 +73,8 @@
             'x':skyImg.width
         });
 
-        
+       
+
 
         function fly(){
             endTime = new Date();
@@ -91,14 +93,12 @@
             sky1.drawSky();
             sky2.drawSky();
 
-           
-
-            
+       
 
              // 绘制小鸟
             bird.drawBird(offsetTime);
             
-            
+
             
             // 递归  新增的方法已经做了优化
             window.requestAnimationFrame(fly);
