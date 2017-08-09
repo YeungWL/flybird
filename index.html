@@ -60,8 +60,19 @@
             'canvasY':100
         });
 
-        
+        // ----------------创建天空对象 -------------
+        var sky1 = new Sky({
+            'ctx':ctx,
+            'skyImg':skyImg,
+            'x':0
+        });
+        var sky2 = new Sky({
+            'ctx':ctx,
+            'skyImg':skyImg,
+            'x':skyImg.width
+        });
 
+        
 
         function fly(){
             endTime = new Date();
@@ -76,11 +87,18 @@
             //清除画布并不会清除之后添加的路径，所以需要开启新路径，以免受到之前路径的影响
             ctx.beginPath();
 
+            // 绘制天空
+            sky1.drawSky();
+            sky2.drawSky();
+
+           
+
+            
 
              // 绘制小鸟
             bird.drawBird(offsetTime);
             
-           
+            
             
             // 递归  新增的方法已经做了优化
             window.requestAnimationFrame(fly);
