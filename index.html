@@ -11,7 +11,7 @@
 <canvas id="c" width="800" height="600"></canvas>
 <script  src="./js/bird.js"></script>
 <script  src="./js/sky.js"></script>
-
+<script  src="./js/land.js"></script>
 <script>
     // 利用for循环的特点 -- 可以同时加载多个照片
     function loadImg (arr,callback){
@@ -73,6 +73,18 @@
             'x':skyImg.width
         });
 
+        // -------创建陆地对象------------------
+        var landArr = [];
+        for(var i = 0; i < 4;i++){
+            var land = new Land({
+                'ctx':ctx,
+                'landImg':landImg,
+                'x':i * landImg.width,
+                'y':c.height - landImg.height
+            });
+            landArr.push(land);
+        }
+
        
 
 
@@ -93,12 +105,18 @@
             sky1.drawSky();
             sky2.drawSky();
 
-       
+           
+
+         
+            // 绘制陆地
+            for(var i = 0; i < landArr.length; i++){
+                landArr[i].drawLand();
+            }
 
              // 绘制小鸟
             bird.drawBird(offsetTime);
             
-
+        
             
             // 递归  新增的方法已经做了优化
             window.requestAnimationFrame(fly);
