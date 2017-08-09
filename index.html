@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>FlappyBird</title>
+    <style>
+        canvas{border:1px solid #ccc;}
+    </style>
+</head>
+<body>
+<canvas id="c" width="800" height="600"></canvas>
+<script  src="./js/bird.js"></script>
+
+<script>
+    // 利用for循环的特点 -- 可以同时加载多个照片
+    function loadImg (arr,callback){
+        var count = 0;
+        var imgs = [];
+        for (var i = 0; i < arr.length; i++) {
+            var img  = new Image();
+            img.src = "./images/" + arr[i] + ".png";
+            /*将创建好的图上添加到数组*/
+            imgs[arr[i]] = img;
+            img.onload = function(){
+                // 加载完再做比较
+                count ++;
+                if(count == arr.length){
+                    /*当加载完毕之后的操作--回调函数*/
+                    callback(imgs);
+                }
+            }
+        }
+    }
+
+    var c = document.querySelector('#c');
+    var ctx = c.getContext('2d');
+    
+
+    loadImg(['birds','sky','land','pipe1','pipe2'],function(imgList){
+        // 小鸟的image图片
+        var birdImg = imgList['birds'];
+        // 天空的image图片
+        var skyImg = imgList['sky'];
+        // 陆地的image图片
+        var landImg = imgList['land'];
+        // 顶部的管道image图片
+        var pipeTop = imgList['pipe2'];
+        // 底部的管道image图片
+        var pipeBottom = imgList['pipe1'];
+
+        // 开始时间和结束时间
+        var startTime = new Date();
+        var endTime = 0;
+        
+        //------------- 创建小鸟的对象------------------
+        var bird = new Bird({
+            'ctx':ctx,
+            'birdImg':birdImg,
+            'canvasX':100,
+            'canvasY':100
+        });
+
+        
+
+
+        function fly(){
+            endTime = new Date();
+            // 响应的时间间隔
+            var offsetTime = endTime - startTime ;
+            // 更换参照值
+            startTime = endTime;
+
+            // 清除画布
+            ctx.clearRect(0,0,c.width,c.height);
+
+            //清除画布并不会清除之后添加的路径，所以需要开启新路径，以免受到之前路径的影响
+            ctx.beginPath();
+
+
+             // 绘制小鸟
+            bird.drawBird(offsetTime);
+            
+           
+            
+            // 递归  新增的方法已经做了优化
+            window.requestAnimationFrame(fly);
+        }
+
+        fly();
+
+        c.onclick = function(){
+            bird.birdSpeed = -0.2;
+        }
+    })
+
+    
+</script>
+</body>
+</html>
