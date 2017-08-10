@@ -12,6 +12,7 @@
 <script  src="./js/bird.js"></script>
 <script  src="./js/sky.js"></script>
 <script  src="./js/land.js"></script>
+<script  src="./js/pipe.js"></script>
 <script>
     // 利用for循环的特点 -- 可以同时加载多个照片
     function loadImg (arr,callback){
@@ -85,7 +86,17 @@
             landArr.push(land);
         }
 
-       
+        //  -------------创建管道对象--------------
+        var pipeArr = [];
+        for(var i = 0; i < 6; i++){
+            var pipe = new Pipe({
+                'ctx':ctx,
+                'pipeTop':pipeTop,
+                'pipeBottom':pipeBottom,
+                'x':400 + (i*pipeTop.width * 3)
+            })
+            pipeArr.push(pipe);
+        }
 
 
         function fly(){
@@ -107,7 +118,11 @@
 
            
 
-         
+            // 绘制管道
+            for(var i = 0;i < pipeArr.length; i++){
+                pipeArr[i].drawPipe();
+            }
+
             // 绘制陆地
             for(var i = 0; i < landArr.length; i++){
                 landArr[i].drawLand();
@@ -116,7 +131,15 @@
              // 绘制小鸟
             bird.drawBird(offsetTime);
             
-        
+            //console.log(bird.canvasY);
+            // 判断上天入地
+            if(bird.canvasY < 0 || bird.canvasY > c.height-landImg.height-birdImg.height){
+                return;
+            }
+
+            if(ctx.isPointInPath(bird.canvasX + (birdImg.width/6),bird.canvasY + (birdImg.height/2))){
+                return;
+            }
             
             // 递归  新增的方法已经做了优化
             window.requestAnimationFrame(fly);
